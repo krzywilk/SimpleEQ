@@ -49,7 +49,6 @@ void SingleChannelFFTPathGenerator::process(juce::Rectangle<float> fftBounds, do
         FFTData2PathConverter.getPath(singleChannelFFTPath);
     }
 }
-
 //==============================================================================
 ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) :
     audioProcessor(p),

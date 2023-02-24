@@ -6,14 +6,16 @@
               companyWebsite="https://www.programmingformusicians.com" displaySplashScreen="1">
   <MAINGROUP id="YPklBH" name="SimpleEQ">
     <GROUP id="{983B0C9E-1FAD-C17F-FEE6-FCDB0F5AFFEC}" name="Source">
-      <GROUP id="{DDFCEC41-7653-1B9D-A922-51DD7598D918}" name="dataProcessing">
-        <FILE id="KFifHn" name="converters.h" compile="0" resource="0" file="Source/dataProcessing/converters.h"/>
-        <FILE id="ZjCedr" name="mathGenerators.h" compile="0" resource="0"
-              file="Source/dataProcessing/mathGenerators.h"/>
-        <FILE id="k2mwc9" name="visualsGenerators.cpp" compile="1" resource="0"
-              file="Source/dataProcessing/visualsGenerators.cpp"/>
-        <FILE id="yXh8ab" name="visualsGenerators.h" compile="0" resource="0"
-              file="Source/dataProcessing/visualsGenerators.h"/>
+      <GROUP id="{2C1E083B-6AD6-118D-DBB2-7EACB1BF60C9}" name="Data processing">
+        <FILE id="XQa4nM" name="converters.h" compile="0" resource="0" file="Source/Data processing/converters.h"/>
+        <FILE id="RX6O91" name="mathGenerators.h" compile="0" resource="0"
+              file="Source/Data processing/mathGenerators.h"/>
+      </GROUP>
+      <GROUP id="{280855BF-07C0-6365-B0EE-55A8444857F5}" name="GUI">
+        <FILE id="UmYH46" name="BasicLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/GUI/BasicLookAndFeel.cpp"/>
+        <FILE id="EG6hwy" name="BasicLookAndFeel.h" compile="0" resource="0"
+              file="Source/GUI/BasicLookAndFeel.h"/>
       </GROUP>
       <FILE id="U6sakx" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

@@ -8,26 +8,88 @@
 
 #pragma once
 
-#include <../Source/dataProcessing/visualsGenerators.h>
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "Data processing/mathGenerators.h"
+#include "Data processing/converters.h"
+#include "GUI/BasicLookAndFeel.h"
 
 
-struct LookAndFeel : juce::LookAndFeel_V4
+struct SingleChannelFFTPathGenerator
 {
-    void drawRotarySlider (juce::Graphics&,
-                           int x, int y, int width, int height,
-                           float sliderPosProportional,
-                           float rotaryStartAngle,
-                           float rotaryEndAngle,
-                           juce::Slider&) override;
-    
-    void drawToggleButton (juce::Graphics &g,
-                           juce::ToggleButton & toggleButton,
-                           bool shouldDrawButtonAsHighlighted,
-                           bool shouldDrawButtonAsDown) override;
+    SingleChannelFFTPathGenerator(SingleChannelSampleFifo<SimpleEQAudioProcessor::BlockType>& scsf) :
+        singleChannelFifo(&scsf)
+    {
+        singleChannelFFTDataGenerator.changeOrder(FFTOrder::order2048);
+        monoBuffer.setSize(1, singleChannelFFTDataGenerator.getFFTSize());
+    }
+    void process(juce::Rectangle<float> fftBounds, double sampleRate);
+    juce::Path getPath() { return singleChannelFFTPath; }
+private:
+    SingleChannelSampleFifo<SimpleEQAudioProcessor::BlockType>* singleChannelFifo;
+
+    juce::AudioBuffer<float> monoBuffer;
+
+    FFTDataGenerator<std::vector<float>> singleChannelFFTDataGenerator;
+
+    AnalyzerPathConverter<juce::Path> FFTData2PathConverter;
+
+    juce::Path singleChannelFFTPath;
 };
+
+
+struct ResponseCurveComponent : juce::Component,
+    juce::AudioProcessorParameter::Listener,
+    juce::Timer
+{
+    ResponseCurveComponent(SimpleEQAudioProcessor&);
+    ~ResponseCurveComponent();
+
+    void parameterValueChanged(int parameterIndex, float newValue) override;
+
+    void parameterGestureChanged(int parameterIndex, bool gestureIsStarting) override { }
+
+    void timerCallback() override;
+
+    void paint(juce::Graphics& g) override;
+    void resized() override;
+
+    void toggleAnalysisEnablement(bool enabled)
+    {
+        shouldShowFFTAnalysis = enabled;
+    }
+private:
+    SimpleEQAudioProcessor& audioProcessor;
+
+    bool shouldShowFFTAnalysis = true;
+
+    juce::Atomic<bool> parametersChanged{ false };
+
+    MonoChain monoChain;
+
+    void updateResponseCurve();
+
+    juce::Path responseCurve;
+
+    void updateChain();
+
+    void drawBackgroundGrid(juce::Graphics& g);
+    void drawTextLabels(juce::Graphics& g);
+
+    std::vector<float> getFrequencies();
+    std::vector<float> getGains();
+    std::vector<float> getXs(const std::vector<float>& freqs, float left, float width);
+
+    juce::Rectangle<int> getRenderArea();
+
+    juce::Rectangle<int> getAnalysisArea();
+
+    SingleChannelFFTPathGenerator leftPathProducer, rightPathProducer;
+};
+
+
+
 
 struct RotarySliderWithLabels : juce::Slider
 {
