@@ -12,6 +12,12 @@
               file="Source/Data processing/mathGenerators.h"/>
       </GROUP>
       <GROUP id="{280855BF-07C0-6365-B0EE-55A8444857F5}" name="GUI">
+        <GROUP id="{B6A159A9-AC0C-D835-045B-33AE52F926CD}" name="Simple elements">
+          <FILE id="ssB71S" name="SimpleElements.cpp" compile="1" resource="0"
+                file="Source/GUI/Simple elements/SimpleElements.cpp"/>
+          <FILE id="VdI4Rk" name="SimpleElements.h" compile="0" resource="0"
+                file="Source/GUI/Simple elements/SimpleElements.h"/>
+        </GROUP>
         <FILE id="UmYH46" name="BasicLookAndFeel.cpp" compile="1" resource="0"
               file="Source/GUI/BasicLookAndFeel.cpp"/>
         <FILE id="EG6hwy" name="BasicLookAndFeel.h" compile="0" resource="0"
