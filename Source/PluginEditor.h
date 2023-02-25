@@ -17,12 +17,13 @@
 #include "GUI/Simple elements/SimpleElements.h"
 
 
+
 struct SingleChannelFFTPathGenerator
 {
     SingleChannelFFTPathGenerator(SingleChannelSampleFifo<SimpleEQAudioProcessor::BlockType>& scsf) :
         singleChannelFifo(&scsf)
     {
-        singleChannelFFTDataGenerator.changeOrder(FFTOrder::order2048);
+        singleChannelFFTDataGenerator.changeOrder(singleChannelFFTDataGenerator.FFTOrder::order2048);
         monoBuffer.setSize(1, singleChannelFFTDataGenerator.getFFTSize());
     }
     void process(juce::Rectangle<float> fftBounds, double sampleRate);
@@ -146,7 +147,7 @@ private:
                         highcutBypassButtonAttachment,
                         analyzerEnabledButtonAttachment;
     
-    LookAndFeel lnf;
+    BasicLookAndFeel lnf;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleEQAudioProcessorEditor)
 };

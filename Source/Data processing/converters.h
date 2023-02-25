@@ -19,7 +19,6 @@ struct AnalyzerPathConverter
         auto width = fftBounds.getWidth();
 
         int numBins = (int)fftSize / 2;
-
         PathType p;
         p.preallocateSpace(3 * (int)fftBounds.getWidth());
 

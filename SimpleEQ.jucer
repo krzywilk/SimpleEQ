@@ -6,6 +6,9 @@
               companyWebsite="https://www.programmingformusicians.com" displaySplashScreen="1">
   <MAINGROUP id="YPklBH" name="SimpleEQ">
     <GROUP id="{983B0C9E-1FAD-C17F-FEE6-FCDB0F5AFFEC}" name="Source">
+      <GROUP id="{0146EC77-540A-BF06-684C-5575486F6050}" name="Simple data structures">
+        <FILE id="pwMMkN" name="queues.h" compile="0" resource="0" file="Source/Simple data structures/queues.h"/>
+      </GROUP>
       <GROUP id="{2C1E083B-6AD6-118D-DBB2-7EACB1BF60C9}" name="Data processing">
         <FILE id="XQa4nM" name="converters.h" compile="0" resource="0" file="Source/Data processing/converters.h"/>
         <FILE id="RX6O91" name="mathGenerators.h" compile="0" resource="0"

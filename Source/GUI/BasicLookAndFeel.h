@@ -12,7 +12,7 @@
 #include <JuceHeader.h>
 
 
-struct LookAndFeel : juce::LookAndFeel_V4
+struct BasicLookAndFeel : juce::LookAndFeel_V4
 {
     void drawRotarySlider(juce::Graphics&,
         int x, int y, int width, int height,

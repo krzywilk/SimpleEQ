@@ -11,7 +11,7 @@
 #include "BasicLookAndFeel.h"
 #include "../PluginEditor.h"
 
-void LookAndFeel::drawRotarySlider(juce::Graphics& g,
+void BasicLookAndFeel::drawRotarySlider(juce::Graphics& g,
     int x,
     int y,
     int width,
@@ -69,7 +69,7 @@ void LookAndFeel::drawRotarySlider(juce::Graphics& g,
     }
 }
 
-void LookAndFeel::drawToggleButton(juce::Graphics& g,
+void BasicLookAndFeel::drawToggleButton(juce::Graphics& g,
     juce::ToggleButton& toggleButton,
     bool shouldDrawButtonAsHighlighted,
     bool shouldDrawButtonAsDown)
