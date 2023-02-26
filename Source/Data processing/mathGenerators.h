@@ -1,8 +1,11 @@
 #include <JuceHeader.h>
+#ifndef MY_HEADER_H
+#define MY_HEADER_H
 
 template<typename BlockType>
-struct FFTDataGenerator
+class FFTDataGenerator
 {
+public:
     enum FFTOrder
     {
         order2048 = 11,
@@ -83,3 +86,4 @@ private:
 
     Fifo<BlockType> fftDataFifo;
 };
+#endif

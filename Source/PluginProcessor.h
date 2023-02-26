@@ -13,15 +13,15 @@
 #include <array>
 
 
-enum Channel
-{
-    Right, //effectively 0
-    Left //effectively 1
-};
-
 template<typename BlockType>
 struct SingleChannelSampleFifo
 {
+    enum Channel
+    {
+        Right, //effectively 0
+        Left //effectively 1
+    };
+
     SingleChannelSampleFifo(Channel ch) : channelToUse(ch)
     {
         prepared.set(false);
@@ -219,8 +219,8 @@ public:
     juce::AudioProcessorValueTreeState apvts {*this, nullptr, "Parameters", createParameterLayout()};
     
     using BlockType = juce::AudioBuffer<float>;
-    SingleChannelSampleFifo<BlockType> leftChannelFifo { Channel::Left };
-    SingleChannelSampleFifo<BlockType> rightChannelFifo { Channel::Right };
+    SingleChannelSampleFifo<BlockType> leftChannelFifo { leftChannelFifo.Channel::Left };
+    SingleChannelSampleFifo<BlockType> rightChannelFifo { rightChannelFifo.Channel::Right };
 private:
     MonoChain leftChain, rightChain;
     
@@ -238,3 +238,4 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleEQAudioProcessor)
 };
+

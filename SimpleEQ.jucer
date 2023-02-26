@@ -15,6 +15,18 @@
               file="Source/Data processing/mathGenerators.h"/>
       </GROUP>
       <GROUP id="{280855BF-07C0-6365-B0EE-55A8444857F5}" name="GUI">
+        <GROUP id="{3FDA53E8-99F2-0BA8-9A3A-B8DF546CAE71}" name="Curves">
+          <FILE id="R7G1oH" name="ResponseStereoSpikedCurveComponent.cpp" compile="1"
+                resource="0" file="Source/GUI/Curves/ResponseStereoSpikedCurveComponent.cpp"/>
+          <FILE id="CspJYG" name="ResponseStereoSpikedCurveComponent.h" compile="0"
+                resource="0" file="Source/GUI/Curves/ResponseStereoSpikedCurveComponent.h"/>
+        </GROUP>
+        <GROUP id="{79EA9F3A-733D-F404-0D6F-BD42650340D9}" name="Visual generators">
+          <FILE id="TDh5pF" name="SingleChannelFFTPathGenerator.cpp" compile="1"
+                resource="0" file="Source/GUI/Visual generators/SingleChannelFFTPathGenerator.cpp"/>
+          <FILE id="oO0Bs7" name="SingleChannelFFTPathGenerator.h" compile="0"
+                resource="0" file="Source/GUI/Visual generators/SingleChannelFFTPathGenerator.h"/>
+        </GROUP>
         <GROUP id="{B6A159A9-AC0C-D835-045B-33AE52F926CD}" name="Simple elements">
           <FILE id="ssB71S" name="SimpleElements.cpp" compile="1" resource="0"
                 file="Source/GUI/Simple elements/SimpleElements.cpp"/>
