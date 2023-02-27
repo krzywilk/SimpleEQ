@@ -9,7 +9,8 @@
 */
 
 #pragma once
-#include "../../PluginProcessor.h"
+#include "../../PluginProcessor.h" // TODO: remove processor, shouldnt be here
+#include "../Source/Sound processing/Queue buffers/SingleChannelBlockFifoBuffer.h"
 #include "../Source/Data processing/mathGenerators.h"
 #include "../Source/Data processing/converters.h"
 
@@ -17,11 +18,11 @@
 class SingleChannelFFTPathGenerator
 {
 public:
-    SingleChannelFFTPathGenerator(SingleChannelSampleFifo<SimpleEQAudioProcessor::BlockType>& scsf);
+    SingleChannelFFTPathGenerator(SingleChannelBlockFifoBuffer<SimpleEQAudioProcessor::BlockType>& scsf);
     void process(juce::Rectangle<float> fftBounds, double sampleRate);
     juce::Path getPath() { return singleChannelFFTPath; }
 private:
-    SingleChannelSampleFifo<SimpleEQAudioProcessor::BlockType>* singleChannelFifo;
+    SingleChannelBlockFifoBuffer<SimpleEQAudioProcessor::BlockType>* singleChannelFifo;
 
     juce::AudioBuffer<float> monoBuffer;
 

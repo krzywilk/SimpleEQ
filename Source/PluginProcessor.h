@@ -11,77 +11,7 @@
 #include <JuceHeader.h>
 #include "Simple data structures/queues.h"
 #include <array>
-
-
-template<typename BlockType>
-struct SingleChannelSampleFifo
-{
-    enum Channel
-    {
-        Right, //effectively 0
-        Left //effectively 1
-    };
-
-    SingleChannelSampleFifo(Channel ch) : channelToUse(ch)
-    {
-        prepared.set(false);
-    }
-    
-    void update(const BlockType& buffer)
-    {
-        jassert(prepared.get());
-        jassert(buffer.getNumChannels() > channelToUse );
-        auto* channelPtr = buffer.getReadPointer(channelToUse);
-        
-        for( int i = 0; i < buffer.getNumSamples(); ++i )
-        {
-            pushNextSampleIntoFifo(channelPtr[i]);
-        }
-    }
-
-    void prepare(int bufferSize)
-    {
-        prepared.set(false);
-        size.set(bufferSize);
-        
-        bufferToFill.setSize(1,             //channel
-                             bufferSize,    //num samples
-                             false,         //keepExistingContent
-                             true,          //clear extra space
-                             true);         //avoid reallocating
-        audioBufferFifo.prepare(1, bufferSize);
-        fifoIndex = 0;
-        prepared.set(true);
-    }
-    //==============================================================================
-    int getNumCompleteBuffersAvailable() const { return audioBufferFifo.getNumAvailableForReading(); }
-    bool isPrepared() const { return prepared.get(); }
-    int getSize() const { return size.get(); }
-    //==============================================================================
-    bool getAudioBuffer(BlockType& buf) { return audioBufferFifo.pull(buf); }
-private:
-    Channel channelToUse;
-    int fifoIndex = 0;
-    Fifo<BlockType> audioBufferFifo;
-    BlockType bufferToFill;
-    juce::Atomic<bool> prepared = false;
-    juce::Atomic<int> size = 0;
-    
-    void pushNextSampleIntoFifo(float sample)
-    {
-        if (fifoIndex == bufferToFill.getNumSamples())
-        {
-            auto ok = audioBufferFifo.push(bufferToFill);
-
-            juce::ignoreUnused(ok);
-            
-            fifoIndex = 0;
-        }
-        
-        bufferToFill.setSample(0, fifoIndex, sample);
-        ++fifoIndex;
-    }
-};
+#include "Sound processing/Queue buffers/SingleChannelBlockFifoBuffer.h"
 
 enum Slope
 {
@@ -219,15 +149,12 @@ public:
     juce::AudioProcessorValueTreeState apvts {*this, nullptr, "Parameters", createParameterLayout()};
     
     using BlockType = juce::AudioBuffer<float>;
-    SingleChannelSampleFifo<BlockType> leftChannelFifo { leftChannelFifo.Channel::Left };
-    SingleChannelSampleFifo<BlockType> rightChannelFifo { rightChannelFifo.Channel::Right };
+    SingleChannelBlockFifoBuffer<BlockType> leftChannelProcessedBlockFifo { SingleChannelBlockFifoBuffer<BlockType>::Channel::Left };
+    SingleChannelBlockFifoBuffer<BlockType> rightChannelProcessedBlockFifo { SingleChannelBlockFifoBuffer<BlockType>::Channel::Right };
 private:
     MonoChain leftChain, rightChain;
     
     void updatePeakFilter(const ChainSettings& chainSettings);
-
-    
-    
     
     void updateLowCutFilters(const ChainSettings& chainSettings);
     void updateHighCutFilters(const ChainSettings& chainSettings);

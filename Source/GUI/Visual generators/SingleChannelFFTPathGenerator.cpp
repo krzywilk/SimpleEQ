@@ -10,7 +10,7 @@
 
 #include "SingleChannelFFTPathGenerator.h"
 
-SingleChannelFFTPathGenerator::SingleChannelFFTPathGenerator(SingleChannelSampleFifo<SimpleEQAudioProcessor::BlockType>& scsf) :
+SingleChannelFFTPathGenerator::SingleChannelFFTPathGenerator(SingleChannelBlockFifoBuffer<SimpleEQAudioProcessor::BlockType>& scsf) :
     singleChannelFifo(&scsf)
 {
     singleChannelFFTDataGenerator.changeOrder(singleChannelFFTDataGenerator.FFTOrder::order2048);

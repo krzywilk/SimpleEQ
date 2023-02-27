@@ -12,8 +12,8 @@
 
 ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) :
     audioProcessor(p),
-    leftPathProducer(audioProcessor.leftChannelFifo),
-    rightPathProducer(audioProcessor.rightChannelFifo)
+    leftPathProducer(audioProcessor.leftChannelProcessedBlockFifo),
+    rightPathProducer(audioProcessor.rightChannelProcessedBlockFifo)
 {
     const auto& params = audioProcessor.getParameters();
     for (auto param : params)

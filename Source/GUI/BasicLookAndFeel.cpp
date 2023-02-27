@@ -7,9 +7,11 @@
 
   ==============================================================================
 */
+#pragma once
 
 #include "BasicLookAndFeel.h"
-#include "../PluginEditor.h"
+#include "Simple elements/SimpleElements.h"
+
 
 void BasicLookAndFeel::drawRotarySlider(juce::Graphics& g,
     int x,
