@@ -47,14 +47,13 @@ enum ChainPositions
 };
 
 using Coefficients = Filter::CoefficientsPtr;
-void updateCoefficients(Coefficients& old, const Coefficients& replacements);
 
 Coefficients makePeakFilter(const ChainSettings& chainSettings, double sampleRate);
 
 template<int Index, typename ChainType, typename CoefficientType>
 void update(ChainType& chain, const CoefficientType& coefficients)
 {
-    updateCoefficients(chain.template get<Index>().coefficients, coefficients[Index]);
+    *chain.template get<Index>().coefficients = *coefficients[Index];
     chain.template setBypassed<Index>(false);
 }
 

@@ -8,8 +8,6 @@
     <GROUP id="{983B0C9E-1FAD-C17F-FEE6-FCDB0F5AFFEC}" name="Source">
       <GROUP id="{2D5849E6-DCAC-651E-73B8-F5FC29CBD5D8}" name="Sound processing">
         <GROUP id="{460FB444-BD5B-D3C8-3EF1-439D2C56DA7F}" name="Queue buffers">
-          <FILE id="RGaDAo" name="SingleChannelBlockFifoBuffer.cpp" compile="1"
-                resource="0" file="Source/Sound processing/Queue buffers/SingleChannelBlockFifoBuffer.cpp"/>
           <FILE id="DzZxBh" name="SingleChannelBlockFifoBuffer.h" compile="0"
                 resource="0" file="Source/Sound processing/Queue buffers/SingleChannelBlockFifoBuffer.h"/>
         </GROUP>

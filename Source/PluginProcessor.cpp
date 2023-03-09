@@ -262,14 +262,10 @@ void SimpleEQAudioProcessor::updatePeakFilter(const ChainSettings &chainSettings
     leftChain.setBypassed<ChainPositions::Peak>(chainSettings.peakBypassed);
     rightChain.setBypassed<ChainPositions::Peak>(chainSettings.peakBypassed);
     
-    updateCoefficients(leftChain.get<ChainPositions::Peak>().coefficients, peakCoefficients);
-    updateCoefficients(rightChain.get<ChainPositions::Peak>().coefficients, peakCoefficients);
+    *leftChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
+    *rightChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
 }
 
-void updateCoefficients(Coefficients &old, const Coefficients &replacements)
-{
-    *old = *replacements;
-}
 
 void SimpleEQAudioProcessor::updateLowCutFilters(const ChainSettings &chainSettings)
 {

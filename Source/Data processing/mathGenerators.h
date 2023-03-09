@@ -1,6 +1,6 @@
 #include <JuceHeader.h>
-#ifndef MY_HEADER_H
-#define MY_HEADER_H
+#ifndef MATH_GENERATORS
+#define MATH_GENERATORS
 
 template<typename BlockType>
 class FFTDataGenerator

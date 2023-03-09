@@ -9,6 +9,12 @@
 */
 
 #pragma once
+#include <JuceHeader.h>
+#include "../Source/Simple data structures/queues.h"
+#include <JuceHeader.h>
+#ifndef SINGLE_CHANNEL_BLOCK_FIFO_BUFFER
+#define SINGLE_CHANNEL_BLOCK_FIFO_BUFFER
+
 template<typename BlockType>
 struct SingleChannelBlockFifoBuffer
 {
@@ -78,3 +84,4 @@ private:
         ++fifoIndex;
     }
 };
+#endif
