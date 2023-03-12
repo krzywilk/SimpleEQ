@@ -12,26 +12,10 @@
 #include "Simple data structures/queues.h"
 #include <array>
 #include "Sound processing/Queue buffers/SingleChannelBlockFifoBuffer.h"
+#include "Sound processing/Filters factories/ChainFiltersFactory.h" 
+#include "Configuration management/Chain/ChainConfiguration.h"
 
-enum Slope
-{
-    Slope_12,
-    Slope_24,
-    Slope_36,
-    Slope_48
-};
-
-struct ChainSettings
-{
-    float peakFreq { 0 }, peakGainInDecibels{ 0 }, peakQuality {1.f};
-    float lowCutFreq { 0 }, highCutFreq { 0 };
-    
-    Slope lowCutSlope { Slope::Slope_12 }, highCutSlope { Slope::Slope_12 };
-    
-    bool lowCutBypassed { false }, peakBypassed { false }, highCutBypassed { false };
-};
-
-ChainSettings getChainSettings(juce::AudioProcessorValueTreeState& apvts);
+ChainConfiguration getChainSettings(juce::AudioProcessorValueTreeState& apvts);
 
 using Filter = juce::dsp::IIR::Filter<float>;
 
@@ -46,9 +30,6 @@ enum ChainPositions
     HighCut
 };
 
-using Coefficients = Filter::CoefficientsPtr;
-
-Coefficients makePeakFilter(const ChainSettings& chainSettings, double sampleRate);
 
 template<int Index, typename ChainType, typename CoefficientType>
 void update(ChainType& chain, const CoefficientType& coefficients)
@@ -86,20 +67,6 @@ void updateCutFilter(ChainType& chain,
             update<0>(chain, coefficients);
         }
     }
-}
-
-inline auto makeLowCutFilter(const ChainSettings& chainSettings, double sampleRate )
-{
-    return juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(chainSettings.lowCutFreq,
-                                                                                       sampleRate,
-                                                                                       2 * (chainSettings.lowCutSlope + 1));
-}
-
-inline auto makeHighCutFilter(const ChainSettings& chainSettings, double sampleRate )
-{
-    return juce::dsp::FilterDesign<float>::designIIRLowpassHighOrderButterworthMethod(chainSettings.highCutFreq,
-                                                                                      sampleRate,
-                                                                                      2 * (chainSettings.highCutSlope + 1));
 }
 //==============================================================================
 /**
@@ -153,10 +120,12 @@ public:
 private:
     MonoChain leftChain, rightChain;
     
-    void updatePeakFilter(const ChainSettings& chainSettings);
+    ChainFiltersFactory chainFiltersFactory;
+
+    void updatePeakFilter(const ChainConfiguration& chainSettings);
     
-    void updateLowCutFilters(const ChainSettings& chainSettings);
-    void updateHighCutFilters(const ChainSettings& chainSettings);
+    void updateLowCutFilters(const ChainConfiguration& chainSettings);
+    void updateHighCutFilters(const ChainConfiguration& chainSettings);
     
     void updateFilters();
     

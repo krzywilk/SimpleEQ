@@ -46,7 +46,7 @@ private:
     lowCutSlopeSlider,
     highCutSlopeSlider;
     
-    ResponseCurveComponent responseCurveComponent;
+    ResponseStereoSpikedCurveComponent responseCurveComponent;
     
     using APVTS = juce::AudioProcessorValueTreeState;
     using Attachment = APVTS::SliderAttachment;

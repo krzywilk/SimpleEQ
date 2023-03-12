@@ -10,8 +10,9 @@
 
 #include "ResponseStereoSpikedCurveComponent.h"
 
-ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) :
+ResponseStereoSpikedCurveComponent::ResponseStereoSpikedCurveComponent(SimpleEQAudioProcessor& p) :
     audioProcessor(p),
+    chainFiltersFactory(p.getSampleRate()),
     leftPathProducer(audioProcessor.leftChannelProcessedBlockFifo),
     rightPathProducer(audioProcessor.rightChannelProcessedBlockFifo)
 {
@@ -29,7 +30,7 @@ ResponseCurveComponent::ResponseCurveComponent(SimpleEQAudioProcessor& p) :
 
 
 
-ResponseCurveComponent::~ResponseCurveComponent()
+ResponseStereoSpikedCurveComponent::~ResponseStereoSpikedCurveComponent()
 {
     const auto& params = audioProcessor.getParameters();
     for (auto param : params)
@@ -38,7 +39,7 @@ ResponseCurveComponent::~ResponseCurveComponent()
     }
 }
 
-void ResponseCurveComponent::updateResponseCurve()
+void ResponseStereoSpikedCurveComponent::updateResponseCurve()
 {
     using namespace juce;
     auto responseArea = getAnalysisArea();
@@ -50,6 +51,8 @@ void ResponseCurveComponent::updateResponseCurve()
     auto& highcut = monoChain.get<ChainPositions::HighCut>();
 
     auto sampleRate = audioProcessor.getSampleRate();
+
+    chainFiltersFactory.setSampleRate(sampleRate);
 
     std::vector<double> mags;
 
@@ -107,7 +110,7 @@ void ResponseCurveComponent::updateResponseCurve()
     }
 }
 
-void ResponseCurveComponent::paint(juce::Graphics& g)
+void ResponseStereoSpikedCurveComponent::paint(juce::Graphics& g)
 {
     using namespace juce;
     // (Our component is opaque, so we must completely fill the background with a solid colour)
@@ -152,7 +155,7 @@ void ResponseCurveComponent::paint(juce::Graphics& g)
     g.drawRoundedRectangle(getRenderArea().toFloat(), 4.f, 1.f);
 }
 
-std::vector<float> ResponseCurveComponent::getFrequencies()
+std::vector<float> ResponseStereoSpikedCurveComponent::getFrequencies()
 {
     return std::vector<float>
     {
@@ -163,7 +166,7 @@ std::vector<float> ResponseCurveComponent::getFrequencies()
     };
 }
 
-std::vector<float> ResponseCurveComponent::getGains()
+std::vector<float> ResponseStereoSpikedCurveComponent::getGains()
 {
     return std::vector<float>
     {
@@ -171,7 +174,7 @@ std::vector<float> ResponseCurveComponent::getGains()
     };
 }
 
-std::vector<float> ResponseCurveComponent::getXs(const std::vector<float>& freqs, float left, float width)
+std::vector<float> ResponseStereoSpikedCurveComponent::getXs(const std::vector<float>& freqs, float left, float width)
 {
     std::vector<float> xs;
     for (auto f : freqs)
@@ -183,7 +186,7 @@ std::vector<float> ResponseCurveComponent::getXs(const std::vector<float>& freqs
     return xs;
 }
 
-void ResponseCurveComponent::drawBackgroundGrid(juce::Graphics& g)
+void ResponseStereoSpikedCurveComponent::drawBackgroundGrid(juce::Graphics& g)
 {
     using namespace juce;
     auto freqs = getFrequencies();
@@ -214,7 +217,7 @@ void ResponseCurveComponent::drawBackgroundGrid(juce::Graphics& g)
     }
 }
 
-void ResponseCurveComponent::drawTextLabels(juce::Graphics& g)
+void ResponseStereoSpikedCurveComponent::drawTextLabels(juce::Graphics& g)
 {
     using namespace juce;
     g.setColour(Colours::lightgrey);
@@ -293,7 +296,7 @@ void ResponseCurveComponent::drawTextLabels(juce::Graphics& g)
     }
 }
 
-void ResponseCurveComponent::resized()
+void ResponseStereoSpikedCurveComponent::resized()
 {
     using namespace juce;
 
@@ -301,12 +304,12 @@ void ResponseCurveComponent::resized()
     updateResponseCurve();
 }
 
-void ResponseCurveComponent::parameterValueChanged(int parameterIndex, float newValue)
+void ResponseStereoSpikedCurveComponent::parameterValueChanged(int parameterIndex, float newValue)
 {
     parametersChanged.set(true);
 }
 
-void ResponseCurveComponent::timerCallback()
+void ResponseStereoSpikedCurveComponent::timerCallback()
 {
     if (shouldShowFFTAnalysis)
     {
@@ -326,7 +329,7 @@ void ResponseCurveComponent::timerCallback()
     repaint();
 }
 
-void ResponseCurveComponent::updateChain()
+void ResponseStereoSpikedCurveComponent::updateChain()
 {
     auto chainSettings = getChainSettings(audioProcessor.apvts);
 
@@ -334,11 +337,11 @@ void ResponseCurveComponent::updateChain()
     monoChain.setBypassed<ChainPositions::Peak>(chainSettings.peakBypassed);
     monoChain.setBypassed<ChainPositions::HighCut>(chainSettings.highCutBypassed);
 
-    auto peakCoefficients = makePeakFilter(chainSettings, audioProcessor.getSampleRate());
+    auto peakCoefficients = chainFiltersFactory.makePeakFilter(chainSettings);
     *monoChain.get<ChainPositions::Peak>().coefficients = *peakCoefficients;
 
-    auto lowCutCoefficients = makeLowCutFilter(chainSettings, audioProcessor.getSampleRate());
-    auto highCutCoefficients = makeHighCutFilter(chainSettings, audioProcessor.getSampleRate());
+    auto lowCutCoefficients = chainFiltersFactory.makeLowCutFilter(chainSettings);
+    auto highCutCoefficients = chainFiltersFactory.makeHighCutFilter(chainSettings);
 
     updateCutFilter(monoChain.get<ChainPositions::LowCut>(),
         lowCutCoefficients,
@@ -349,7 +352,7 @@ void ResponseCurveComponent::updateChain()
         chainSettings.highCutSlope);
 }
 
-juce::Rectangle<int> ResponseCurveComponent::getRenderArea()
+juce::Rectangle<int> ResponseStereoSpikedCurveComponent::getRenderArea()
 {
     auto bounds = getLocalBounds();
 
@@ -361,7 +364,7 @@ juce::Rectangle<int> ResponseCurveComponent::getRenderArea()
     return bounds;
 }
 
-juce::Rectangle<int> ResponseCurveComponent::getAnalysisArea()
+juce::Rectangle<int> ResponseStereoSpikedCurveComponent::getAnalysisArea()
 {
     auto bounds = getRenderArea();
     bounds.removeFromTop(4);

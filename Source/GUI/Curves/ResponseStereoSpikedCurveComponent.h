@@ -13,12 +13,12 @@
 #include "../Visual generators/SingleChannelFFTPathGenerator.h"
 
 
-struct ResponseCurveComponent : juce::Component,
+struct ResponseStereoSpikedCurveComponent : juce::Component,
     juce::AudioProcessorParameter::Listener,
     juce::Timer
 {
-    ResponseCurveComponent(SimpleEQAudioProcessor&);
-    ~ResponseCurveComponent();
+    ResponseStereoSpikedCurveComponent(SimpleEQAudioProcessor&);
+    ~ResponseStereoSpikedCurveComponent();
 
     void parameterValueChanged(int parameterIndex, float newValue) override;
 
@@ -35,6 +35,8 @@ struct ResponseCurveComponent : juce::Component,
     }
 private:
     SimpleEQAudioProcessor& audioProcessor;
+
+    ChainFiltersFactory chainFiltersFactory;
 
     bool shouldShowFFTAnalysis = true;
 
